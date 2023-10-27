@@ -1,0 +1,37 @@
+{
+	"name": "denetwork-queue",
+	"version": "1.0.1",
+	"description": "DeNetwork Queue",
+	"main": "dist/index.js",
+	"browser": "dist/index.js",
+	"license": "MIT",
+	"files": [
+		"src",
+		"dist"
+	],
+	"scripts": {
+		"clean": "rm -rf dist",
+		"build": "npm run clean && tsc",
+		"test": "jest"
+	},
+	"devDependencies": {
+		"@babel/preset-env": "^7.21.5",
+		"@babel/preset-typescript": "^7.21.5",
+		"@jest/globals": "^29.5.0",
+		"@types/jest": "^29.5.1",
+		"@types/lodash": "^4.14.196",
+		"@types/node": "^20.5.7",
+		"jest": "^29.6.4",
+		"ts-jest": "^29.1.0",
+		"ts-node": "^10.9.1"
+	},
+	"dependencies": {
+		"denetwork-utils": "^1.0.25",
+		"ioredis": "^5.3.2"
+	},
+	"author": "DeNetwork, Team.",
+	"homepage": "https://github.com/denetwork/",
+	"contributors": [
+		"DeNetwork, Team."
+	]
+}
