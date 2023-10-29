@@ -1,7 +1,8 @@
+import Redis from "ioredis";
+import _ from 'lodash';
 import { ITsQueue } from "../interfaces/ITsQueue";
 import { TsQueueConnectOptions, TsQueueMember, TsQueuePullOptions, TsQueuePullResult } from "../models/TsQueueModels";
 import { PageUtil, TypeUtil } from "denetwork-utils";
-import Redis from "ioredis";
 import { defaultTsQueuePullResult } from "../constants/TsQueueContants";
 import { TsQueueMemberEncoder } from "../utils/TsQueueMemberEncoder";
 import { RedisOptions } from "ioredis/built/redis/RedisOptions";
@@ -12,7 +13,18 @@ import { RedisOptions } from "ioredis/built/redis/RedisOptions";
  */
 export class TsQueueService implements ITsQueue
 {
+	/**
+	 *	@protected
+	 */
 	protected redis : Redis | null = null;
+
+	/**
+	 * 	Maximum storage days
+	 *	@protected
+	 */
+	protected maxStorageDays : number = 90;
+
+
 
 	constructor
 	(
@@ -59,6 +71,19 @@ export class TsQueueService implements ITsQueue
 		}
 	}
 
+	/**
+	 *	@param value
+	 *	@returns {void}
+	 */
+	public setMaxStorageDays( value : number )
+	{
+		if ( ! _.isNumber( value ) || value <= 0 )
+		{
+			throw new Error( `invalid value` );
+		}
+
+		this.maxStorageDays = value;
+	}
 
 	/**
 	 * 	@returns {Promise<boolean>}
@@ -89,7 +114,7 @@ export class TsQueueService implements ITsQueue
 	/**
 	 * 	Enqueue : insert a time serial data at the end of the queue
 	 *	@param channel		{string}
-	 *	@param timestamp	{number}
+	 *	@param timestamp	{number} timestamp in millisecond
 	 *	@param data		{object}
 	 */
 	public async push( channel : string, timestamp : number, data : object ) : Promise<number>
@@ -113,6 +138,12 @@ export class TsQueueService implements ITsQueue
 				{
 					return reject( `invalid data` );
 				}
+
+				//
+				//	remove expired data automatically
+				//
+				const expiredTimestamp = new Date( new Date().getTime() - ( this.maxStorageDays * 24 * 60 * 60 * 1000 ) ).getTime();
+				await this.removeFromHead( channel, expiredTimestamp );
 
 				//	...
 				const result : number = await this.redis.zadd( channel, timestamp, json );
@@ -203,7 +234,7 @@ export class TsQueueService implements ITsQueue
 	 *
 	 *	remove all the members from head in a sorted set within the given scores
 	 * 	@param channel		{string}
-	 * 	@param endTimestamp	{number}
+	 * 	@param endTimestamp	{number} timestamp in millisecond
 	 * 	@returns {Promise<number>}
 	 */
 	public removeFromHead( channel : string, endTimestamp : number ) : Promise<number>
@@ -214,8 +245,8 @@ export class TsQueueService implements ITsQueue
 	/**
 	 * 	remove all the members in a sorted set within the given scores
 	 *	@param channel		{string}
-	 *	@param startTimestamp	{number}
-	 *	@param endTimestamp	{number}
+	 *	@param startTimestamp	{number} timestamp in millisecond
+	 *	@param endTimestamp	{number} timestamp in millisecond
 	 *	@returns {Promise<number>}
 	 */
 	public remove( channel : string, startTimestamp : number, endTimestamp : number ) : Promise<number>

@@ -1,6 +1,6 @@
 {
 	"name": "denetwork-queue",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"description": "DeNetwork Queue",
 	"main": "dist/index.js",
 	"browser": "dist/index.js",
@@ -27,7 +27,8 @@
 	},
 	"dependencies": {
 		"denetwork-utils": "^1.0.25",
-		"ioredis": "^5.3.2"
+		"ioredis": "^5.3.2",
+		"lodash": "^4.17.21"
 	},
 	"author": "DeNetwork, Team.",
 	"homepage": "https://github.com/denetwork/",
