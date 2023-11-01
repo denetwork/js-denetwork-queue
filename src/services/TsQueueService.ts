@@ -74,8 +74,9 @@ export class TsQueueService implements ITsQueue
 	/**
 	 *	@param value
 	 *	@returns {void}
+	 *	@returns {void}
 	 */
-	public setMaxStorageDays( value : number )
+	public setMaxStorageDays( value : number ) : void
 	{
 		if ( ! _.isNumber( value ) || value <= 0 )
 		{
@@ -116,6 +117,7 @@ export class TsQueueService implements ITsQueue
 	 *	@param channel		{string}
 	 *	@param timestamp	{number} timestamp in millisecond
 	 *	@param data		{object}
+	 *	@returns {Promise<number>}
 	 */
 	public async push( channel : string, timestamp : number, data : object ) : Promise<number>
 	{
@@ -161,7 +163,7 @@ export class TsQueueService implements ITsQueue
 	 *	@param startTimestamp	{number} timestamp in millisecond. 0 means the beginning of the list
 	 *	@param endTimestamp	{number} timestamp in millisecond. -1 means the last of the list
 	 *	@param options		{TsQueuePullOptions}
-	 *	@returns {TsQueuePullResult}
+	 *	@returns {Promise<TsQueuePullResult>}
 	 */
 	public async pull
 		(
