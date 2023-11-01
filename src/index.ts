@@ -7,5 +7,5 @@ export { ITsQueue }
 import type { TsQueueMember, TsQueuePullOptions, TsQueuePullResult } from "./models/TsQueueModels";
 export { TsQueueMember, TsQueuePullOptions, TsQueuePullResult };
 
-import { TsQueueService} from "./services/TsQueueService";
+import { TsQueueService } from "./services/TsQueueService";
 export { TsQueueService };
