@@ -181,13 +181,24 @@ export class TsQueueService implements ITsQueue
 				{
 					return reject( `not initialized` );
 				}
+
+				//	...
+				if ( -1 === startTimestamp )
+				{
+					startTimestamp = new Date().getTime();
+				}
+				if ( -1 === endTimestamp )
+				{
+					endTimestamp = new Date().getTime();
+				}
+
 				if ( startTimestamp < 0 )
 				{
 					return reject( `invalid startTimestamp` );
 				}
 				if ( endTimestamp < startTimestamp )
 				{
-					return reject( `invalid endTimestamp` );
+					return reject( `invalid endTimestamp, must be greater than or equal to startTimestamp` );
 				}
 
 				const pageNo : number = PageUtil.getSafePageNo( options?.pageNo );

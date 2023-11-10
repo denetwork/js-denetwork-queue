@@ -143,6 +143,69 @@ describe( "TsQueueService", () =>
 
 		}, 60 * 10e3 );
 
+		it( "should query with endTimestamp as -1 from the queue", async () =>
+		{
+			const tsQueueService = new TsQueueService();
+
+			//	Dequeue : remove all
+			await tsQueueService.removeFromHead( channel, new Date().getTime() );
+
+			const maxPage = 5;
+			const pageSize = 10;
+			for ( let i = 0; i < maxPage * pageSize; i ++ )
+			{
+				await tsQueueService.push( channel, new Date().getTime(), { msg : `hi-${ i }` } );
+				await TestUtil.sleep( 100 );
+			}
+
+			let pageNo = 1;
+			for ( ; pageNo <= maxPage; pageNo ++ )
+			{
+				const pageOptions : TsQueuePullOptions = {
+					pageNo : pageNo,
+					pageSize : pageSize
+				};
+				const result : TsQueuePullResult = await tsQueueService.pull
+				(
+					channel,
+					0,
+					-1,
+					pageOptions
+				);
+				expect( result ).toBeDefined();
+				expect( result ).toHaveProperty( 'total' );
+				expect( result ).toHaveProperty( 'pageKey' );
+				expect( result ).toHaveProperty( 'list' );
+				expect( result.total ).toBe( 10 );
+				expect( Array.isArray( result.list ) ).toBeTruthy();
+				expect( result.list.length ).toBe( 10 );
+			}
+
+			//
+			//	query page 6
+			//
+			const resultPage6 : TsQueuePullResult = await tsQueueService.pull
+			(
+				channel,
+				0,
+				new Date().getTime(),
+				{
+					pageNo : pageNo + 1,
+					pageSize : pageSize
+				}
+			);
+			expect( resultPage6 ).toBeDefined();
+			expect( resultPage6 ).toHaveProperty( 'total' );
+			expect( resultPage6 ).toHaveProperty( 'pageKey' );
+			expect( resultPage6 ).toHaveProperty( 'list' );
+			expect( resultPage6.total ).toBe( 0 );
+			expect( Array.isArray( resultPage6.list ) ).toBeTruthy();
+			expect( resultPage6.list.length ).toBe( 0 );
+
+			//	...
+			await tsQueueService.close();
+
+		}, 60 * 10e3 );
 
 		it( "should remove data from the head of the queue", async () =>
 		{

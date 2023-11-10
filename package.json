@@ -1,6 +1,6 @@
 {
 	"name": "denetwork-queue",
-	"version": "1.0.4",
+	"version": "1.0.5",
 	"description": "DeNetwork Queue",
 	"main": "dist/index.js",
 	"browser": "dist/index.js",
