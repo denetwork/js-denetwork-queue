@@ -1,12 +1,11 @@
 {
 	"name": "denetwork-queue",
-	"version": "1.0.5",
+	"version": "1.0.6",
 	"description": "DeNetwork Queue",
 	"main": "dist/index.js",
 	"browser": "dist/index.js",
 	"license": "MIT",
 	"files": [
-		"src",
 		"dist"
 	],
 	"scripts": {
