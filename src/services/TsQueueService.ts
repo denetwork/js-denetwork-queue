@@ -1,7 +1,13 @@
 import Redis from "ioredis";
 import _ from 'lodash';
 import { ITsQueue } from "../interfaces/ITsQueue";
-import { TsQueueConnectOptions, TsQueueMember, TsQueuePullOptions, TsQueuePullResult } from "../models/TsQueueModels";
+import {
+	TsQueueConnectOptions,
+	TsQueueMember,
+	TsQueuePullOptions,
+	TsQueuePullOrder,
+	TsQueuePullResult
+} from "../models/TsQueueModels";
 import { PageUtil, TypeUtil } from "denetwork-utils";
 import { defaultTsQueuePullResult } from "../constants/TsQueueContants";
 import { TsQueueMemberEncoder } from "../utils/TsQueueMemberEncoder";
@@ -204,7 +210,18 @@ export class TsQueueService implements ITsQueue
 				const pageNo : number = PageUtil.getSafePageNo( options?.pageNo );
 				const pageSize : number = PageUtil.getSafePageSize( options?.pageSize );
 				const startOffset : number = ( pageNo - 1 ) * pageSize;
-				const list : Array<string> = await this.redis.zrangebyscore
+				const direction : TsQueuePullOrder = ( undefined !== options?.order && ( options?.order in TsQueuePullOrder ) ) ? options.order : TsQueuePullOrder.ASC;
+				let list : Array<string> = [];
+				if ( TsQueuePullOrder.ASC === direction )
+				{
+					//
+					//	Return a range of members in a sorted set,
+					//		by score,
+					//		with scores ordered from low to high
+					//
+					//	key, min, max
+					//
+					list = await this.redis.zrangebyscore
 					(
 						channel,
 						startTimestamp,
@@ -213,6 +230,27 @@ export class TsQueueService implements ITsQueue
 						startOffset,
 						pageSize
 					);
+				}
+				else
+				{
+					//
+					//	Return a range of members in a sorted set,
+					//		by score,
+					//		with scores ordered from high to low
+					//
+					//	key, max, min
+					//
+					list = await this.redis.zrevrangebyscore
+					(
+						channel,
+						endTimestamp,
+						startTimestamp,
+						"LIMIT",
+						startOffset,
+						pageSize
+					);
+				}
+
 				if ( Array.isArray( list ) && list.length > 0 )
 				{
 					let pageKey : number = 0;
