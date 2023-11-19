@@ -6,7 +6,7 @@ import {
 	TsQueuePullOrder,
 	TsQueuePullResult
 } from "../models/TsQueueModels";
-import { PageUtil, TypeUtil } from "denetwork-utils";
+import { PageUtil } from "denetwork-utils";
 import { defaultTsQueuePullResult } from "../constants/TsQueueConstants";
 import { TsQueueMemberEncoder } from "../utils/TsQueueMemberEncoder";
 import { BaseRedis } from "./BaseRedis";

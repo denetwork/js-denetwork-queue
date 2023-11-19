@@ -1,7 +1,6 @@
 import { describe, expect } from '@jest/globals';
-import { TsQueuePullOptions, TsQueuePullResult, TsQueueService } from "../../../src";
 import { TestUtil } from "denetwork-utils";
-import { NsFilterService } from "../../../src/services/NsFilterService";
+import { NsFilterService } from "../../../src";
 
 
 
