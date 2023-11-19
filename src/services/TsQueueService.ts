@@ -1,5 +1,3 @@
-import Redis from "ioredis";
-import _ from 'lodash';
 import { ITsQueue } from "../interfaces/ITsQueue";
 import {
 	TsQueueConnectOptions,
@@ -9,29 +7,21 @@ import {
 	TsQueuePullResult
 } from "../models/TsQueueModels";
 import { PageUtil, TypeUtil } from "denetwork-utils";
-import { defaultTsQueuePullResult } from "../constants/TsQueueContants";
+import { defaultTsQueuePullResult } from "../constants/TsQueueConstants";
 import { TsQueueMemberEncoder } from "../utils/TsQueueMemberEncoder";
-import { RedisOptions } from "ioredis/built/redis/RedisOptions";
+import { BaseRedis } from "./BaseRedis";
 
 
 /**
  * 	class TsQueueService
  */
-export class TsQueueService implements ITsQueue
+export class TsQueueService extends BaseRedis implements ITsQueue
 {
 	/**
-	 *	@protected
+	 *	@param [portOrPath]	{number | string}
+	 *	@param [hostOrOptions]	{string | TsQueueConnectOptions}
+	 *	@param [options]	{TsQueueConnectOptions}
 	 */
-	protected redis : Redis | null = null;
-
-	/**
-	 * 	Maximum storage days
-	 *	@protected
-	 */
-	protected maxStorageDays : number = 90;
-
-
-
 	constructor
 	(
 		portOrPath ?: number | string,
@@ -39,83 +29,7 @@ export class TsQueueService implements ITsQueue
 		options ?: TsQueueConnectOptions
 	)
 	{
-		if ( 'number' === typeof portOrPath )
-		{
-			//	portOrPath is number of port
-			const port = Number( portOrPath );
-
-			if ( 'string' === typeof hostOrOptions )
-			{
-				//	hostOrOptions is a string of host
-				const host : string = String( hostOrOptions );
-				if ( options )
-				{
-					this.redis = new Redis( port, host, options );
-				}
-				else
-				{
-					this.redis = new Redis( port, host );
-				}
-			}
-			else if ( hostOrOptions )
-			{
-				//	hostOrOptions is options
-				const redisOptions: RedisOptions = hostOrOptions;
-				this.redis = new Redis( port, redisOptions );
-			}
-		}
-		else if ( TypeUtil.isString( portOrPath ) )
-		{
-			//	a socket path
-			//	e.g. : new Redis( "/tmp/redis.sock" );
-			const socketPath = String( portOrPath );
-			this.redis = new Redis( socketPath );
-		}
-		else
-		{
-			this.redis = new Redis();
-		}
-	}
-
-	/**
-	 *	@param value
-	 *	@returns {void}
-	 *	@returns {void}
-	 */
-	public setMaxStorageDays( value : number ) : void
-	{
-		if ( ! _.isNumber( value ) || value <= 0 )
-		{
-			throw new Error( `invalid value` );
-		}
-
-		this.maxStorageDays = value;
-	}
-
-	/**
-	 * 	@returns {Promise<boolean>}
-	 */
-	public async close() : Promise<boolean>
-	{
-		return new Promise( async ( resolve, reject ) =>
-		{
-			try
-			{
-				if ( this.redis )
-				{
-					await this.redis.quit();
-					resolve( true );
-				}
-				else
-				{
-					reject( `not initialized` );
-				}
-			}
-			catch ( err )
-			{
-				reject( err );
-			}
-		});
+		super( portOrPath, hostOrOptions, options );
 	}
 
 	/**
@@ -150,7 +64,7 @@ export class TsQueueService implements ITsQueue
 				//
 				//	remove expired data automatically
 				//
-				const expiredTimestamp = new Date( new Date().getTime() - ( this.maxStorageDays * 24 * 60 * 60 * 1000 ) ).getTime();
+				const expiredTimestamp = new Date( new Date().getTime() - ( this.maxStorageSeconds * 1000 ) ).getTime();
 				await this.removeFromHead( channel, expiredTimestamp );
 
 				//	...
