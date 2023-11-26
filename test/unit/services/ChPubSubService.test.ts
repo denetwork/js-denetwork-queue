@@ -1,8 +1,7 @@
 import { describe, expect } from '@jest/globals';
 import { TestUtil } from "denetwork-utils";
-import { NsFilterService } from "../../../src";
-import { ChPubService } from "../../../src/services/ChPubService";
-import { ChSubService } from "../../../src/services/ChSubService";
+import { ChPubService } from "../../../src";
+import { ChSubService } from "../../../src";
 
 
 

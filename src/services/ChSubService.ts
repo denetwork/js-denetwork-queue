@@ -51,7 +51,7 @@ export class ChSubService extends BaseRedis
 				/**
 				 * 	subscribe
 				 */
-				this.redis.subscribe( channel, ( err, count ) =>
+				this.redis.subscribe( channel, ( err, _count ) =>
 				{
 					if ( err )
 					{
@@ -85,7 +85,7 @@ export class ChSubService extends BaseRedis
 								return callback( channel, `` );
 							}
 
-							let jsonObject = {};
+							let jsonObject;
 							try
 							{
 								jsonObject = JSON.parse( message );
