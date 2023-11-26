@@ -13,6 +13,7 @@ export * from "./interfaces/INsFilter";
  * 	models
  */
 export * from "./models/TsQueueModels";
+export * from "./models/ChSubModels";
 
 
 /**
@@ -21,4 +22,6 @@ export * from "./models/TsQueueModels";
 export * from "./services/BaseRedis";
 export * from "./services/TsQueueService";
 export * from "./services/NsFilterService";
+export * from "./services/ChPubService";
+export * from "./services/ChSubService";
 
