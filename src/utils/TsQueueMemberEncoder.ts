@@ -1,3 +1,4 @@
+import JSONBig from "json-bigint";
 import { TsQueueMember } from "../models/TsQueueModels";
 import { TypeUtil } from "denetwork-utils";
 
@@ -17,7 +18,7 @@ export class TsQueueMemberEncoder
 			}
 
 			//	...
-			return JSON.stringify( member );
+			return JSONBig.stringify( member );
 		}
 		catch ( err )
 		{
@@ -33,7 +34,7 @@ export class TsQueueMemberEncoder
 	{
 		try
 		{
-			const decoded : any = JSON.parse( json );
+			const decoded : any = JSONBig.parse( json );
 			if ( decoded && this.isValidTsQueueMember( decoded ) )
 			{
 				return {

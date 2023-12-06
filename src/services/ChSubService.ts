@@ -1,6 +1,7 @@
+import _ from "lodash";
+import JSONBig from "json-bigint";
 import { TsQueueConnectOptions } from "../models/TsQueueModels";
 import { BaseRedis } from "./BaseRedis";
-import _ from "lodash";
 import { ChSubCallback, ChSubOptions } from "../models/ChSubModels";
 
 /**
@@ -88,7 +89,7 @@ export class ChSubService extends BaseRedis
 							let jsonObject;
 							try
 							{
-								jsonObject = JSON.parse( message );
+								jsonObject = JSONBig.parse( message );
 							}
 							catch ( err )
 							{
