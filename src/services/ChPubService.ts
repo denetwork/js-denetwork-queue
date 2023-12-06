@@ -1,5 +1,4 @@
 import _ from "lodash";
-import JSONBig from "json-bigint";
 import { TsQueueConnectOptions } from "../models/TsQueueModels";
 import { BaseRedis } from "./BaseRedis";
 
@@ -45,7 +44,7 @@ export class ChPubService extends BaseRedis
 
 				if ( _.isObject( message ) )
 				{
-					message = JSONBig.stringify( message );
+					message = JSON.stringify( message );
 				}
 				if ( ! _.isString( message ) || _.isEmpty( message ) )
 				{
