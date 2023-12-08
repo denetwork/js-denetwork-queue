@@ -14,6 +14,7 @@ export * from "./interfaces/INsFilter";
  */
 export * from "./models/TsQueueModels";
 export * from "./models/ChSubModels";
+export * from "./models/DeRedisOptions";
 
 
 /**
