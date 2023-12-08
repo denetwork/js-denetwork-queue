@@ -1,4 +1,4 @@
-import { TsQueueConnectOptions } from "../models/TsQueueModels";
+import { DeRedisOptions } from "../models/DeRedisOptions";
 import { BaseRedis } from "./BaseRedis";
 import { INsFilter } from "../interfaces/INsFilter";
 import _ from "lodash";
@@ -10,14 +10,14 @@ export class NsFilterService extends BaseRedis implements INsFilter
 {
 	/**
 	 *	@param [portOrPath]	{number | string}
-	 *	@param [hostOrOptions]	{string | TsQueueConnectOptions}
-	 *	@param [options]	{TsQueueConnectOptions}
+	 *	@param [hostOrOptions]	{string | DeRedisOptions}
+	 *	@param [options]	{DeRedisOptions}
 	 */
 	constructor
 	(
 		portOrPath ? : number | string,
-		hostOrOptions ? : string | TsQueueConnectOptions,
-		options ? : TsQueueConnectOptions
+		hostOrOptions ? : string | DeRedisOptions,
+		options ? : DeRedisOptions
 	)
 	{
 		super( portOrPath, hostOrOptions, options );

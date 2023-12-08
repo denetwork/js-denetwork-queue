@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { TsQueueConnectOptions } from "../models/TsQueueModels";
+import { DeRedisOptions } from "../models/DeRedisOptions";
 import { BaseRedis } from "./BaseRedis";
 import { ChSubCallback, ChSubOptions } from "../models/ChSubModels";
 
@@ -10,14 +10,14 @@ export class ChSubService extends BaseRedis
 {
 	/**
 	 *	@param [portOrPath]	{number | string}
-	 *	@param [hostOrOptions]	{string | TsQueueConnectOptions}
-	 *	@param [options]	{TsQueueConnectOptions}
+	 *	@param [hostOrOptions]	{string | DeRedisOptions}
+	 *	@param [options]	{DeRedisOptions}
 	 */
 	constructor
 	(
 		portOrPath ? : number | string,
-		hostOrOptions ? : string | TsQueueConnectOptions,
-		options ? : TsQueueConnectOptions
+		hostOrOptions ? : string | DeRedisOptions,
+		options ? : DeRedisOptions
 	)
 	{
 		super( portOrPath, hostOrOptions, options );

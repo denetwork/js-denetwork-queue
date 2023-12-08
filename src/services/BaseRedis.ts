@@ -1,5 +1,5 @@
 import Redis from "ioredis";
-import { TsQueueConnectOptions } from "../models/TsQueueModels";
+import { DeRedisOptions } from "../models/DeRedisOptions";
 import { RedisOptions } from "ioredis/built/redis/RedisOptions";
 import { TypeUtil } from "denetwork-utils";
 import _ from "lodash";
@@ -23,14 +23,14 @@ export class BaseRedis
 
 	/**
 	 *	@param [portOrPath]	{number | string}
-	 *	@param [hostOrOptions]	{string | TsQueueConnectOptions}
-	 *	@param [options]	{TsQueueConnectOptions}
+	 *	@param [hostOrOptions]	{string | DeRedisOptions}
+	 *	@param [options]	{DeRedisOptions}
 	 */
 	constructor
 	(
 		portOrPath ?: number | string,
-		hostOrOptions ?: string | TsQueueConnectOptions,
-		options ?: TsQueueConnectOptions
+		hostOrOptions ?: string | DeRedisOptions,
+		options ?: DeRedisOptions
 	)
 	{
 		if ( 'number' === typeof portOrPath )

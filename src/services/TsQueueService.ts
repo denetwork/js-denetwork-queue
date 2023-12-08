@@ -1,11 +1,11 @@
 import { ITsQueue } from "../interfaces/ITsQueue";
 import {
-	TsQueueConnectOptions,
 	TsQueueMember,
 	TsQueuePullOptions,
 	TsQueuePullOrder,
 	TsQueuePullResult
 } from "../models/TsQueueModels";
+import { DeRedisOptions } from "../models/DeRedisOptions";
 import { PageUtil } from "denetwork-utils";
 import { defaultTsQueuePullResult } from "../constants/TsQueueConstants";
 import { TsQueueMemberEncoder } from "../utils/TsQueueMemberEncoder";
@@ -19,14 +19,14 @@ export class TsQueueService extends BaseRedis implements ITsQueue
 {
 	/**
 	 *	@param [portOrPath]	{number | string}
-	 *	@param [hostOrOptions]	{string | TsQueueConnectOptions}
-	 *	@param [options]	{TsQueueConnectOptions}
+	 *	@param [hostOrOptions]	{string | DeRedisOptions}
+	 *	@param [options]	{DeRedisOptions}
 	 */
 	constructor
 	(
 		portOrPath ?: number | string,
-		hostOrOptions ?: string | TsQueueConnectOptions,
-		options ?: TsQueueConnectOptions
+		hostOrOptions ?: string | DeRedisOptions,
+		options ?: DeRedisOptions
 	)
 	{
 		super( portOrPath, hostOrOptions, options );
